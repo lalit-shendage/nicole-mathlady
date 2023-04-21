@@ -53,10 +53,10 @@ function SortingQuestion({ id, prompt, required, options, onSort }) {
           </li>
         ))}
       </ul>
+      <button onClick={handleSort}>Sort</button>
       {isSorted !== null && (
         <p>{isSorted ? 'Correct!' : 'Incorrect.'}</p>
       )}
-      <button onClick={handleSort}>Sort</button>
     </div>
   );
 }

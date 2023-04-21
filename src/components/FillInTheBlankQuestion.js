@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function FillInTheBlankQuestion(props) {
   const [answer, setAnswer] = useState("");
+  const [isCorrect, setIsCorrect] = useState(null);
 
   const handleChange = (e) => {
     setAnswer(e.target.value);
@@ -9,15 +10,11 @@ function FillInTheBlankQuestion(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isCorrect = props.answer.includes(answer.toLowerCase());
-    if (typeof props.onSubmit === "function") {
-      props.onSubmit(isCorrect);
-    }
-    if (isCorrect) {
-      console.log(true);
-    }else{
-        console.log(false); 
-    }
+    const lowercaseAnswer = typeof props.answer === 'string' ? props.answer.toLowerCase() : props.answer;
+    const lowercaseUserAnswer = answer.toLowerCase();
+    const correct = lowercaseAnswer === lowercaseUserAnswer;
+    setIsCorrect(correct);
+    props.onSubmit(correct);
   };
 
   return (
@@ -25,6 +22,9 @@ function FillInTheBlankQuestion(props) {
       <p>{props.prompt}</p>
       <input type="text" value={answer} onChange={handleChange} />
       <button type="submit">Submit</button>
+      {isCorrect !== null && (
+        <p>{isCorrect ? 'Correct!' : 'Incorrect.'}</p>
+      )}
     </form>
   );
 }

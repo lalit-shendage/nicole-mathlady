@@ -5,7 +5,9 @@ import MatrixSortingQuestion from './components/MatrixSortingQuestion';
 import SingleChoiceQuestion from './components/SingleChoiceQuestion';
 import MultipleChoiceQuestion from './components/MultipleChoiceQuestion';
 import SortingQuestion from './components/SortingQuestion';
-import FreeChoice from './components/FreeChoice'
+import FreeChoice from './components/FreeChoice';
+import PlotLabelImageTextQuestion from './components/PlotLabelImageTextQuestion';
+import image from './media/images/graph.png'
 
 const jsonData = {
     "questions": [
@@ -120,12 +122,26 @@ const jsonData = {
             "text": "elephant"
           }
         ]
+      },
+      {
+        "id": 7,
+        "type": "plot_label_image",
+        "prompt": "Plot the points (5,0), (0,4), (2,4)",
+        "imageURL": "./media/images/graph.png",
+        "points": [
+          {"x": 1170, "y": 2170},
+          {"x": 210, "y": 1400},
+          {"x": 980, "y": 1790}
+        ]
+       
       }
+      
     ]
   };
 const QuestionList = () => {
     const [answers, setAnswers] = useState({});
   
+    
   const handleAnswerChange = (id, value) => {
     setAnswers(prevState => ({
       ...prevState,
@@ -137,12 +153,14 @@ const QuestionList = () => {
   }
 
   const getQuestionComponent = (question) => {
+    
     switch (question.type) {
       case "fill-in-the-blank":
         return (
             <FillInTheBlankQuestion
             key={question.id}
             id={question.id}
+            
             prompt={question.prompt}
             required={question.required}
             answer={question.answer} // Add this line to pass the answer prop
@@ -204,6 +222,22 @@ const QuestionList = () => {
             onAnswerChange={handleAnswerChange}
           />
         );
+        case "plot_label_image":
+  return (
+    <>
+    
+    <PlotLabelImageTextQuestion
+      key={question.id}
+      id={question.id}
+      imageURL={image}
+      prompt={question.prompt}
+      // instructions={question.instructions}
+      points={question.points}
+      onSubmit={(answerData) => handleAnswerChange(question.id, answerData)}
+    />
+    </>
+  );
+
       default:
         return null;
     }
